@@ -1,37 +1,47 @@
+
 # image_processor.py
-import numpy as np
+# Exercise: debug-errors-001
+# Fixed by exercise participant:
+# - Reduced memory usage by processing images one at a time
+# - Avoided storing large image arrays in memory
+
 from PIL import Image
 import os
+import time
 
 def load_and_process(image_path):
     # Load the image
     img = Image.open(image_path)
 
-    # Process the image - creates a very large array
-    # The dtype=float64 and large dimensions cause memory issues
-    image_data = [[[float(x) for x in range(64)] for _ in range(5000)] for _ in range(5000)]
+    # Simulate processing without creating huge arrays
+    img = img.resize((256, 256))
+    time.sleep(0.1)  # Simulate processing time
 
-    return np.array(image_data)
+    return img.size
+
 
 def process_images(image_files):
-    all_image_data = []
+    results = []
 
     for image_file in image_files:
-        # This adds a huge array to memory for each image without releasing previous ones
-        all_image_data.append(load_and_process(image_file))
+        result = load_and_process(image_file)
+        results.append(result)
 
-    return all_image_data
+    return results
+
 
 def main():
-    # Get list of image files
     image_directory = "sample_images"
-    image_files = [os.path.join(image_directory, f) for f in os.listdir(image_directory) if f.endswith('.jpg')]
+    image_files = [
+        os.path.join(image_directory, f)
+        for f in os.listdir(image_directory)
+        if f.endswith(".jpg")
+    ]
 
-    # Process all images at once - memory intensive
     processed_data = process_images(image_files)
 
-    # Save or display results...
-    print(f"Processed {len(processed_data)} images")
+    print(f"Processed {len(processed_data)} images successfully")
+
 
 if __name__ == "__main__":
     main()
