@@ -41,3 +41,21 @@ def test_overdue_task_gets_score_boost(self):
         # Base score from priority is at least 10
         # Overdue tasks should receive a significant boost
         self.assertGreaterEqual(score, 60)
+
+
+def test_task_assigned_to_current_user_gets_score_boost(self):
+        now = datetime(2026, 1, 1)
+
+        task = {
+            "priority": 1,
+            "last_updated": now,
+            "due_date": None,
+            "assigned_to_current_user": True
+        }
+
+        score = calculate_task_score(task, now)
+
+        # Base score = 10 (priority 1 * 10)
+        # Assigned-to-current-user bonus = +12
+        self.assertEqual(score, 22)
+``
