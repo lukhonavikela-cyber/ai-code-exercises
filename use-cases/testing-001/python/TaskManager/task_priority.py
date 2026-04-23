@@ -15,6 +15,15 @@ def calculate_task_score(task):
     # Calculate base score from priority
     score = priority_weights.get(task.priority, 0) * 10
 
+    
+  # (other existing logic may be here: due dates, last updated, etc.)
+
+    # ✅ Boost score for tasks assigned to the current user
+    if task.get("assigned_to_current_user"):
+        score += 12
+
+    return score
+
     # Add due date factor (higher score for tasks due sooner)
     if task.due_date:
         days_until_due = (task.due_date - datetime.now()).days
