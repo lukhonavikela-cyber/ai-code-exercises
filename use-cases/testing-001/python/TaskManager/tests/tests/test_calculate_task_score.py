@@ -26,3 +26,18 @@ class TestCalculateTaskScore(unittest.TestCase):
         high_score = calculate_task_score(high_priority_task, now)
 
         self.assertGreater(high_score, low_score)
+
+def test_overdue_task_gets_score_boost(self):
+        now = datetime(2026, 1, 10)
+
+        overdue_task = {
+            "priority": 1,
+            "last_updated": now,
+            "due_date": datetime(2026, 1, 5)
+        }
+
+        score = calculate_task_score(overdue_task, now)
+
+        # Base score from priority is at least 10
+        # Overdue tasks should receive a significant boost
+        self.assertGreaterEqual(score, 60)
