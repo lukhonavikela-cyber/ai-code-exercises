@@ -59,3 +59,21 @@ def test_task_assigned_to_current_user_gets_score_boost(self):
         # Assigned-to-current-user bonus = +12
         self.assertEqual(score, 22)
 ``
+
+def test_days_since_update_uses_whole_days(self):
+        now = datetime(2026, 1, 10, 12, 0, 0)
+        last_updated = datetime(2026, 1, 9, 13, 0, 0)
+
+        task = {
+            "priority": 1,
+            "last_updated": last_updated,
+            "due_date": None
+        }
+
+        score = calculate_task_score(task, now)
+
+        # Base score = 10
+        # Task was updated 1 day ago → penalty should be exactly 1
+        self.assertEqual(score, 9)
+``
+
